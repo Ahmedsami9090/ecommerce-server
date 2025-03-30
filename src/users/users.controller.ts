@@ -1,6 +1,8 @@
 import {
+    Body,
     Controller,
     Get,
+    Post,
     Req,
     Res,
     UseGuards
@@ -9,6 +11,8 @@ import { UserService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { GuardReq } from 'common/types/types';
 import { Response } from 'express';
+import { UserDocument } from 'src/DB/schema/user.schema';
+import { ConfirmEmailDto } from './DTO/userDto';
 
 
 @Controller('users')
@@ -21,4 +25,8 @@ export class UserController {
         return this.userService.getProfile(req, res)
     }
 
+    @Post('confirm')
+    confirmEmail(@Body() body : ConfirmEmailDto, @Res() res : Response){
+        return this.userService.confirmEmail(body, res)
+    }
 }

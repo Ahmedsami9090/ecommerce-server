@@ -1,4 +1,5 @@
-import { IsAlpha, IsEmail, isNotEmpty, IsNotEmpty, IsStrongPassword, MaxLength, MinLength} from "class-validator";
+import { Type } from "class-transformer";
+import { IsAlpha, IsDate, IsEmail, isNotEmpty, IsNotEmpty, IsStrongPassword, Length, MaxLength, MinLength } from "class-validator";
 import { IsPasswordMatch } from "common/decorators/IsPasswordPatch.decorator";
 
 export class SignupDto {
@@ -7,32 +8,49 @@ export class SignupDto {
     @MinLength(2)
     @MaxLength(10)
     @IsAlpha()
-    fname : string
+    fname: string
 
     @IsNotEmpty()
     @MinLength(2)
     @MaxLength(10)
     @IsAlpha()
-    lname : string
+    lname: string
+
+    @IsNotEmpty()
+    @IsAlpha()
+    gender: string
 
     @IsEmail()
     @IsNotEmpty()
-    email : string
+    email: string
 
     @IsStrongPassword()
     @IsNotEmpty()
-    password : string
+    password: string
 
     @IsNotEmpty()
     @IsPasswordMatch()
-    cPassword : string
+    cPassword: string
+
+    @IsNotEmpty()
+    @Length(11, 11)
+    phone: string
+
+    @IsNotEmpty()
+    address: string
+
+    @IsDate()
+    @Type(() => Date)
+    @IsNotEmpty()
+    DOB: Date
+
 }
 
 export class LoginDto {
     @IsEmail()
     @IsNotEmpty()
-    email : string
+    email: string
 
     @IsNotEmpty()
-    password : string
+    password: string
 }
