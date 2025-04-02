@@ -1,5 +1,6 @@
 import { Request } from "express"
 import { Types } from "mongoose"
+import { UserDocument } from "src/DB/schema/user.schema"
 
 
 export enum RoleEnum {
@@ -22,11 +23,14 @@ export enum GenderEnum {
     male = 'male',
     female = 'female'
 }
-export interface GuardReq extends Request {
+export interface AuthGuardReq extends Request {
     user : {
         email : string
         _id : Types.ObjectId
         iat : Date
         exp : Date
     }
+}
+export interface IsRegisteredGuardReq extends Request {
+    user : UserDocument
 }

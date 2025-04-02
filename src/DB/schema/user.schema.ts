@@ -38,7 +38,8 @@ export class User {
     email: string
 
     @Prop({
-        required: true
+        required: true,
+        match : /^(?=.*[!@#$%^&*()\-_=+\[\]{};:'",.<>?|\\])(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/
     })
     password: string
 

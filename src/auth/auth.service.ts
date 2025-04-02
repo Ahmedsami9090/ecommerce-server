@@ -13,18 +13,18 @@ export class AuthService {
     constructor(private readonly userRepoService: UserRepoService,
         private readonly jwtService: JwtService,
         private readonly eventEmitter: EventEmitter2,
-        private readonly otp : Otp
+        private readonly otp: Otp
     ) { }
-//============================ signup ==========================================
+    //============================ signup ==========================================
     async signup(body: Partial<UserDocument>, res: Response) {
         try {
             const assignedOtp = this.otp.create()
             const user = await this.userRepoService.create({
-                ...body, 
-                otp : createHash(assignedOtp.otp),
-                otpExpireAt : assignedOtp.otpExpire
+                ...body,
+                otp: createHash(assignedOtp.otp),
+                otpExpireAt: assignedOtp.otpExpire
             }
-        )
+            )
             const emailOptions: sendEmailOptions = {
                 to: user.email,
                 subject: "verify your account",
@@ -40,10 +40,10 @@ export class AuthService {
             }
         }
     }
-//============================ login ===========================================
+    //============================ login ===========================================
     async login(body: Partial<UserDocument>, res: Response) {
         try {
-            const user = await this.userRepoService.findOne({ email: body.email, confirmed : true })
+            const user = await this.userRepoService.findOne({ email: body.email, confirmed: true })
             if (!user) {
                 throw new BadRequestException('User not found or not confirmed.')
             }
