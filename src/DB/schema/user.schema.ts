@@ -57,6 +57,9 @@ export class User {
     @Prop()
     isDeleted: boolean
 
+    @Prop()
+    isFreezed : boolean
+
     @Prop({
         required: true,
         length: 11

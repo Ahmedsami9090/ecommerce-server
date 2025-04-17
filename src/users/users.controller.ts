@@ -1,44 +1,67 @@
 import {
-    Body,
-    Controller,
-    Get,
-    Post,
-    Put,
-    Req,
-    Res,
-    UseGuards
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './users.service';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { AuthGuardReq, IsRegisteredGuardReq } from 'common/types/types';
+import { AuthenticationGuard } from 'common/guards/authentication.guard';
+import {
+  AuthenticationGuardReq,
+  IsRegisteredGuardReq,
+  RoleEnum,
+} from 'common/types/types';
 import { Response } from 'express';
-import { UserDocument } from 'src/DB/schema/user.schema';
-import { ConfirmEmailDto, ForgotPasswordDto, ResetPasswordDto } from './DTO/userDto';
-import { IsRegisteredGuard } from './user.guard';
-
+import {
+  ConfirmEmailDto,
+  ForgotPasswordDto,
+  freezeAccountDto,
+  ResetPasswordDto,
+} from './DTO/userDto';
+import { Roles } from 'common/decorators/Roles.decorator';
+import { AuthorizationGuard } from 'common/guards/authorization.guard';
 
 @Controller('users')
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
-    @Get('profile')
-    @UseGuards(AuthGuard)
-    getProfile(@Req() req: AuthGuardReq, @Res() res: Response) {
-        return this.userService.getProfile(req, res)
-    }
+  @Get('profile')
+  @UseGuards(AuthenticationGuard)
+  getProfile(@Req() req: AuthenticationGuardReq, @Res() res: Response) {
+    return this.userService.getProfile(req, res);
+  }
 
-    @Post('confirm')
-    confirmEmail(@Body() body: ConfirmEmailDto, @Res() res: Response) {
-        return this.userService.confirmEmail(body, res)
-    }
+  @Post('confirm')
+  confirmEmail(@Body() body: ConfirmEmailDto, @Res() res: Response) {
+    return this.userService.confirmEmail(body, res);
+  }
 
-    @Post('password-forgot')
-    forgotPassword(@Body() body: ForgotPasswordDto, @Res() res: Response) {
-        return this.userService.forgotPassword(body, res)
-    }
+  @Post('password-forgot')
+  forgotPassword(@Body() body: ForgotPasswordDto, @Res() res: Response) {
+    return this.userService.forgotPassword(body, res);
+  }
 
-    @Put('password-reset')
-    resetPassword(@Body() body: ResetPasswordDto, @Res() res: Response) {
-        return this.userService.resetPassword(body, res)
-    }
+  @Put('password-reset')
+  resetPassword(@Body() body: ResetPasswordDto, @Res() res: Response) {
+    return this.userService.resetPassword(body, res);
+  }
+
+  @Put('freeze/:userId')
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  freezeAccount(@Param() params: freezeAccountDto) {
+    return this.userService.freezeAccount(params);
+  }
+
+  @Delete()
+  @UseGuards(AuthenticationGuard)
+  deleteAccount(@Req() req: AuthenticationGuardReq) {
+    return this.userService.deleteAccount(req);
+  }
 }

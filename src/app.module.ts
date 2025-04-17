@@ -2,18 +2,24 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import mongoose from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     UsersModule,
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/e-commerce'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('DB_URI'),
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
       isGlobal : true,
-      envFilePath : './config/.env'
+      envFilePath : process.cwd() + '/config/.env'
     }),
     AuthModule
   ],

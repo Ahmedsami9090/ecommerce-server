@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsStrongPassword, Length } from "class-validator";
+import { Types } from "mongoose";
 
 
 export class ConfirmEmailDto {
@@ -33,4 +34,9 @@ export class ResetPasswordDto {
     @IsStrongPassword()
     @IsNotEmpty()
     newPassword: string
+}
+
+export class freezeAccountDto {
+    @IsNotEmpty()
+    userId : Types.ObjectId
 }

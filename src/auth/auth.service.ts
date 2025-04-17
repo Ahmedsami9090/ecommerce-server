@@ -54,14 +54,14 @@ export class AuthService {
             const accessToken = this.jwtService.sign(
                 { email: user.email, _id: user._id },
                 {
-                    secret: process.env.JWT_SECRET,
+                    secret: process.env.JWT_SECRET_ACCESS,
                     expiresIn: '2h'
                 }
             )
             const refreshToken = this.jwtService.sign(
                 { email: user.email, _id: user._id },
                 {
-                    secret: process.env.JWT_SECRET,
+                    secret: process.env.JWT_SECRET_REFRESH,
                     expiresIn: '7d'
                 }
             )
