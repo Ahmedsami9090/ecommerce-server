@@ -7,6 +7,11 @@ export enum RoleEnum {
   user = 'user',
 }
 
+export enum otpTypes {
+  activateAccount = 'activateAccount',
+  resetPassword = 'resetPassword'
+}
+
 export enum OrderStatusEnum {
   placed = 'placed',
   paymentReceived = 'paymentReceived',

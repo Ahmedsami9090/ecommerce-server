@@ -13,7 +13,7 @@ export class Otp {
         return {otp, otpExpire}
     }
 
-    verify(user : UserDocument, otp){
+    verify(user : UserDocument, otp : string){
         if(user.otpExpireAt < new Date()){
             throw new UnauthorizedException('OTP expired.')
         }

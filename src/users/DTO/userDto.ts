@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsStrongPassword, Length } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsStrongPassword, Length } from "class-validator";
+import { otpTypes } from "common/types/types";
 import { Types } from "mongoose";
 
 
@@ -39,4 +40,15 @@ export class ResetPasswordDto {
 export class freezeAccountDto {
     @IsNotEmpty()
     userId : Types.ObjectId
+}
+
+export class otpResendDto {
+    
+    @IsNotEmpty()
+    @IsEmail()
+    email : string
+
+    @IsNotEmpty()
+    @IsEnum(otpTypes)
+    otpFor : otpTypes
 }

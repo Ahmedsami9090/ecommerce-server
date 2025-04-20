@@ -14,7 +14,6 @@ import { UserService } from './users.service';
 import { AuthenticationGuard } from 'common/guards/authentication.guard';
 import {
   AuthenticationGuardReq,
-  IsRegisteredGuardReq,
   RoleEnum,
 } from 'common/types/types';
 import { Response } from 'express';
@@ -22,6 +21,7 @@ import {
   ConfirmEmailDto,
   ForgotPasswordDto,
   freezeAccountDto,
+  otpResendDto,
   ResetPasswordDto,
 } from './DTO/userDto';
 import { Roles } from 'common/decorators/Roles.decorator';
@@ -63,5 +63,10 @@ export class UserController {
   @UseGuards(AuthenticationGuard)
   deleteAccount(@Req() req: AuthenticationGuardReq) {
     return this.userService.deleteAccount(req);
+  }
+
+  @Put('otp-resend')
+  otpResend(@Body() body: otpResendDto) {
+    return this.userService.otpResend(body);
   }
 }

@@ -1,7 +1,7 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { MongooseModule, Prop, Schema, SchemaFactory, Virtual } from "@nestjs/mongoose";
-import { RoleEnum, GenderEnum } from "common/types/types";
-import { createHash } from "common/utils/hash";
+import { RoleEnum, GenderEnum, otpTypes } from "common/types/types";
+import { createHash } from "common/services/hash";
 import { HydratedDocument } from "mongoose";
 
 
@@ -78,6 +78,11 @@ export class User {
 
     @Prop()
     otp: string
+
+    @Prop({
+        enum : otpTypes
+    })
+    otpFor : string
 
     @Prop()
     otpExpireAt: Date

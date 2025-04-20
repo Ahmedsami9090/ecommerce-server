@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
-import { Otp } from 'common/utils/otp';
-import { SendEmail } from 'common/utils/sendEmail';
+import { Otp } from 'common/services/otp';
+import { SendEmail } from 'common/services/sendEmail';
 import { UserRepoService } from 'src/DB/repository/users.repository.service';
 import { userModel } from 'src/DB/schema/user.schema';
 import { AuthController } from './auth.controller';
