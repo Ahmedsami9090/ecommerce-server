@@ -25,7 +25,9 @@ import {
   ResetPasswordDto,
 } from './DTO/userDto';
 import { Roles } from 'common/decorators/Roles.decorator';
-import { AuthorizationGuard } from 'common/guards/authorization.guard';
+import AuthorizationGuard from 'common/guards/authorization.guard';
+import { User } from 'common/decorators/User.decorator';
+import { UserDocument } from 'src/DB/schema/user.schema';
 
 @Controller('users')
 export class UserController {
@@ -33,36 +35,36 @@ export class UserController {
 
   @Get('profile')
   @UseGuards(AuthenticationGuard)
-  getProfile(@Req() req: AuthenticationGuardReq, @Res() res: Response) {
-    return this.userService.getProfile(req, res);
+  getProfile(@Req() {user}: AuthenticationGuardReq) {
+    return this.userService.getProfile(user);
   }
 
   @Post('confirm')
-  confirmEmail(@Body() body: ConfirmEmailDto, @Res() res: Response) {
-    return this.userService.confirmEmail(body, res);
+  confirmEmail(@Body() body: ConfirmEmailDto) {
+    return this.userService.confirmEmail(body);
   }
 
   @Post('password-forgot')
-  forgotPassword(@Body() body: ForgotPasswordDto, @Res() res: Response) {
-    return this.userService.forgotPassword(body, res);
+  forgotPassword(@Body() body: ForgotPasswordDto) {
+    return this.userService.forgotPassword(body);
   }
 
   @Put('password-reset')
-  resetPassword(@Body() body: ResetPasswordDto, @Res() res: Response) {
-    return this.userService.resetPassword(body, res);
+  resetPassword(@Body() body: ResetPasswordDto) {
+    return this.userService.resetPassword(body);
   }
 
   @Put('freeze/:userId')
   @Roles(RoleEnum.admin)
-  @UseGuards(AuthenticationGuard, AuthorizationGuard)
-  freezeAccount(@Param() params: freezeAccountDto) {
-    return this.userService.freezeAccount(params);
+  @UseGuards(AuthorizationGuard)
+  freezeAccount(@Param() params: freezeAccountDto, @User() user : UserDocument) {
+    return this.userService.freezeAccount(params, user);
   }
 
   @Delete()
   @UseGuards(AuthenticationGuard)
-  deleteAccount(@Req() req: AuthenticationGuardReq) {
-    return this.userService.deleteAccount(req);
+  deleteAccount(@User() user: UserDocument) {
+    return this.userService.deleteAccount(user);
   }
 
   @Put('otp-resend')

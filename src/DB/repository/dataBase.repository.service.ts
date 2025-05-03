@@ -12,7 +12,7 @@ export abstract class DataBaseRepository<T> {
         return await this.model.findOne(query)
     }
 
-    async findAll(query: FilterQuery<T>): Promise<T | never[]> {
+    async findAll(query: FilterQuery<T>): Promise<T[] | never[]> {
         return await this.model.find(query)
     }
 
@@ -31,7 +31,9 @@ export abstract class DataBaseRepository<T> {
     async findOneAndUpdate(query: FilterQuery<T>, data: Partial<T>): Promise<T | null> {
         return await this.model.findOneAndUpdate(query, data, { new: true })
     }
-    
+    async findOneAndDelete(query : FilterQuery<T>) : Promise<T | null>{
+        return await this.model.findOneAndDelete(query)
+    }
     async updateOne(query : FilterQuery<T>, data:  Partial<T>){
         return await this.model.updateOne(query, data)
     }

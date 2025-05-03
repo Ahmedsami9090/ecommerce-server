@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
+import { SubCategoriesModule } from './sub-categories/sub-categories.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { CategoriesModule } from './categories/categories.module';
       envFilePath : process.cwd() + '/config/.env'
     }),
     AuthModule,
-    CategoriesModule
+    CategoriesModule,
+    SubCategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],

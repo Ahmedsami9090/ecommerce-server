@@ -7,10 +7,23 @@ import { UserController } from './users.controller';
 import { UserService } from './users.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SendEmail } from 'common/services/sendEmail';
+import AuthorizationGuard from 'common/guards/authorization.guard';
+import { AuthenticationGuard } from 'common/guards/authentication.guard';
+import { Authorization } from 'common/guards/authorization';
 
 @Module({
-  imports : [userModel],
+  imports: [userModel],
   controllers: [UserController],
-  providers: [UserService, JwtService, UserRepoService, Otp, EventEmitter2, SendEmail]
+  providers: [
+    UserService,
+    JwtService,
+    UserRepoService,
+    Otp,
+    EventEmitter2,
+    SendEmail,
+    AuthorizationGuard,
+    AuthenticationGuard,
+    Authorization,
+  ],
 })
 export class UsersModule {}

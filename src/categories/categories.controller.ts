@@ -5,10 +5,8 @@ import {
   Get,
   HttpCode,
   Param,
-  Paramtype,
   Post,
   Put,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -18,15 +16,16 @@ import { multerCloudConfig } from 'common/utils';
 import { CategoriesService } from './categories.service';
 import { FILE_CATEGORIES } from 'common/constants/constants';
 import { Roles } from 'common/decorators/Roles.decorator';
-import { AuthenticationGuardReq, RoleEnum } from 'common/types/types';
-import { AuthenticationGuard } from 'common/guards/authentication.guard';
-import { AuthorizationGuard } from 'common/guards/authorization.guard';
+import { RoleEnum } from 'common/types/types';
+import AuthorizationGuard  from 'common/guards/authorization.guard';
 import {
   createCategoryDto,
   deleteCategoryDto,
   updateCategoryBodyDto,
   updateCategoryParamsDto,
 } from './DTO/categoryDto';
+import { User } from 'common/decorators/User.decorator';
+import { UserDocument } from 'src/DB/schema/user.schema';
 
 @Controller('categories')
 export class CategoriesController {
@@ -34,8 +33,8 @@ export class CategoriesController {
 
   @Post('new')
   @HttpCode(201)
-  @Roles(RoleEnum.admin)
-  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  @Roles(RoleEnum.super)
+  @UseGuards(AuthorizationGuard)
   @UseInterceptors(
     FileInterceptor(
       'categoryImage',
@@ -43,7 +42,7 @@ export class CategoriesController {
     ),
   )
   createCategory(
-    @Req() { user }: AuthenticationGuardReq,
+    @User() user : UserDocument,
     @Body() body: createCategoryDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -52,8 +51,8 @@ export class CategoriesController {
 
   @Put('modify/:categoryName')
   @HttpCode(201)
-  @Roles(RoleEnum.admin)
-  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  @Roles(RoleEnum.super)
+  @UseGuards(AuthorizationGuard)
   @UseInterceptors(
     FileInterceptor(
       'categoryImage',
@@ -62,7 +61,7 @@ export class CategoriesController {
   )
   updateCategory(
     @Param() { categoryName }: updateCategoryParamsDto,
-    @Req() { user }: AuthenticationGuardReq,
+    @User()  user : UserDocument,
     @Body() body: updateCategoryBodyDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -75,11 +74,11 @@ export class CategoriesController {
   }
 
   @Delete('/:categoryName')
-  @Roles(RoleEnum.admin)
-  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  @Roles(RoleEnum.super)
+  @UseGuards(AuthorizationGuard)
   deleteCategory(
     @Param() { categoryName }: deleteCategoryDto,
-    @Req() { user }: AuthenticationGuardReq,
+    @User() user : UserDocument,
   ) {
     return this.categoriesService.deleteCategory(categoryName, user);
   }

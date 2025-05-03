@@ -64,16 +64,6 @@ export class CategoriesService {
     if (!category) {
       throw new NotFoundException('category not found');
     }
-    if (file) {
-      const { secure_url, public_id } = await this.cloudUpload.uploadFile(
-        file,
-        { folder: 'categories' },
-      );
-      tmp.image = { secure_url, public_id };
-      if (category.image?.public_id) {
-        await this.cloudUpload.deleteFile(category.image.public_id);
-      }
-    }
     if (body?.name) {
       const nameCheck = await this.categoryRepoService.findOne({
         slug: _slugify(body.name),
@@ -84,7 +74,16 @@ export class CategoriesService {
       tmp.name = body.name;
       tmp.slug = _slugify(body.name);
     }
-
+    if (file) {
+      const { secure_url, public_id } = await this.cloudUpload.uploadFile(
+        file,
+        { folder: 'categories' },
+      );
+      tmp.image = { secure_url, public_id };
+      if (category.image?.public_id) {
+        await this.cloudUpload.deleteFile(category.image.public_id);
+      }
+    }
     if (Object.keys(tmp).length > 0) {
       tmp.modifiedBy = user._id;
     }

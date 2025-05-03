@@ -2,7 +2,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { MongooseModule, Prop, Schema, SchemaFactory, Virtual } from "@nestjs/mongoose";
 import { RoleEnum, GenderEnum, otpTypes } from "common/types/types";
 import { createHash } from "common/services/hash";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 
 
 
@@ -59,6 +59,11 @@ export class User {
 
     @Prop()
     isFreezed : boolean
+
+    @Prop({
+        ref : 'User',
+    })
+    freezedBy : Types.ObjectId
 
     @Prop({
         required: true,

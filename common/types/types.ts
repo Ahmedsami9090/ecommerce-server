@@ -3,8 +3,9 @@ import { Types } from 'mongoose';
 import { User, UserDocument } from 'src/DB/schema/user.schema';
 
 export enum RoleEnum {
+  super = 'super',
   admin = 'admin',
-  user = 'user',
+  user = 'user'
 }
 
 export enum otpTypes {
